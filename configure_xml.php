@@ -16,7 +16,7 @@
 
 /**
  * Configure XML form.
- * 
+ *
  * @package   local_shebang_xml
  * @author    Michelle Melton <meltonml@appstate.edu>
  * @copyright (c) 2019 Appalachian State Universtiy, Boone, NC
@@ -43,62 +43,57 @@ $mform = new configure_xml_form();
 if ($fromform = $mform->get_data()) {
     // In this case you process validated data; $mform->get_data() returns data posted in form.
     confirm_sesskey();
-    //$context = context_system::instance();
-    //require_capability('local/export_settings:export', $context);
-    
+
     // Start XML file output.
     $xmloutput = new memory_xml_output();
     $xmlwriter = new xml_writer($xmloutput);
     $xmlwriter->start();
-    
+
     $xmlwriter->begin_tag('enterprise');
-    
+
     $xmlwriter->begin_tag('properties', array('lang' => 'en'));
     $xmlwriter->full_tag('datasource', 'Appalachian State University SCT Banner');
     $xmlwriter->full_tag('datetime', date('Y-m-dTH:i:s'));
     $xmlwriter->end_tag('properties');
-    
+
     $children = preg_split('/\r\n/', $fromform->children);
-    
+
+    // Create membership property for each child course.
     foreach ($children as $child) {
         $xmlwriter->begin_tag('membership');
-        
+
         $xmlwriter->begin_tag('sourcedid');
         $xmlwriter->full_tag('source', 'Appalachian State University SCT Banner');
-        $xmlwriter->full_tag('id', $fromform->parent);
+        $xmlwriter->full_tag('id', trim($fromform->parent));
         $xmlwriter->end_tag('sourcedid');
-        
+
         $xmlwriter->begin_tag('member');
         $xmlwriter->begin_tag('sourcedid');
         $xmlwriter->full_tag('source', 'Appalachian State University SCT Banner');
-        $xmlwriter->full_tag('id', $child);
+        $xmlwriter->full_tag('id', trim($child));
         $xmlwriter->end_tag('sourcedid');
         $xmlwriter->full_tag('idtype', 2);
         $xmlwriter->begin_tag('role', array('roletype' => '01'));
         $xmlwriter->full_tag('status', 1);
         $xmlwriter->end_tag('role');
         $xmlwriter->end_tag('member');
-        
+
         $xmlwriter->end_tag('membership');
     }
-    
+
     $xmlwriter->end_tag('enterprise');
     $xmlwriter->stop();
     $xmlstr = $xmloutput->get_allcontents();
-    $fileprefix = addcslashes($fromform->parent . '-' . date('Y-m-dTH:i:s'), '"');
+    $fileprefix = addcslashes(trim($fromform->parent) . '-' . date('Y-m-dTH:i:s'), '"');
     $xmlfilename = $fileprefix . '.xml';
     send_file($xmlstr, $xmlfilename, 0, 0, true, true);
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate
     // and the form should be redisplayed or on the first display of the form.
-    
-    // Set default data (if any).
-    $toform = new stdClass();
     if ($mform->is_submitted()) {
         // Form is submitted but data does not validate.
     } else {
         // First display of the form, can get params from $_GET.
-        $mform->set_data($toform);
         echo $OUTPUT->header();
         $mform->display();
         echo $OUTPUT->footer();

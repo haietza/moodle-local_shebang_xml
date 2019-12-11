@@ -16,7 +16,7 @@
 
 /**
  * Language file for shebang_xml plugin.
- * 
+ *
  * @package   local_shebang_xml
  * @author    Michelle Melton <meltonml@appstate.edu>
  * @copyright (c) 2019 Appalachian State Universtiy, Boone, NC

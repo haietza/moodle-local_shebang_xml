@@ -16,7 +16,7 @@
 
 /**
  * Configure XML form.
- * 
+ *
  * @package   local_shebang_xml
  * @author    Michelle Melton <meltonml@appstate.edu>
  * @copyright (c) 2019 Appalachian State Universtiy, Boone, NC
@@ -35,7 +35,6 @@ require_once("$CFG->libdir/adminlib.php");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class configure_xml_form extends moodleform {
-
     /**
      * Define configure XML form.
      * {@inheritDoc}
@@ -44,11 +43,11 @@ class configure_xml_form extends moodleform {
     public function definition() {
         global $DB;
         $mform = $this->_form;
-        
+
         $mform->addElement('text', 'parent', get_string('parent', 'local_shebang_xml'));
         $mform->setType('parent', PARAM_TEXT);
         $mform->addHelpButton('parent', 'parent', 'local_shebang_xml');
-        
+
         $mform->addElement('textarea', 'children', get_string('children', 'local_shebang_xml'));
         $mform->setType('children', PARAM_TEXT);
         $mform->addHelpButton('children', 'children', 'local_shebang_xml');
@@ -64,7 +63,6 @@ class configure_xml_form extends moodleform {
      * @return $errors array of error message to display on form
      */
     public function validation($data, $files) {
-        global $DB;
         $errors = array();
         return $errors;
     }
